@@ -2,7 +2,8 @@ const newTimer = (attrs = {}) => {
     const timer = {
         title: attrs.title || 'Timer',
         project: attrs.project || 'Project',
-        id: uuid.v4(), // eslint-disable-line no-undef
+        //id: uuid.v4(), // eslint-disable-line no-undef
+        id: Math.floor((Math.random() * 50) + Math.random()),
         elapsed: 0,
     };
 

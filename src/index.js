@@ -4,5 +4,9 @@ import './index.css';
 import TimersDashboard from './TimersDashboard';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<TimersDashboard />, document.getElementById('root'));
+ReactDOM.render(
+    <TimersDashboard />, 
+    document.getElementById('root')
+);
+
 registerServiceWorker();
