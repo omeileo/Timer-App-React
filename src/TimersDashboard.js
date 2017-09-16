@@ -32,6 +32,10 @@ export default class TimersDashboard extends Component
     this.updateTimer(timer);
   };
 
+  handleDeleteClick = (timerID) => {
+    this.deleteTimer(timerID);
+  };
+
   createTimer = (timer) => {
     const _timer = Helpers.newTimer(timer);
     this.setState({timers: this.state.timers.concat(_timer)});
@@ -41,7 +45,8 @@ export default class TimersDashboard extends Component
     const updatedTimers = this.state.timers.map((_timer) => {
       if (timer.id === _timer.id)
       {
-        return Object.assign({}, _timer, {title: timer.title, project: timer.project});
+        return Object.assign({}, _timer, 
+          {title: timer.title, project: timer.project});
       }
       else
       {
@@ -52,6 +57,14 @@ export default class TimersDashboard extends Component
     this.setState({timers: updatedTimers});
   };
 
+  deleteTimer = (timerID) => {
+    this.setState({
+      timers: this.state.timers.filter((timer) => (
+        timer.id !== timerID
+      )),
+    });
+  };
+
   render() 
   {
     return (
@@ -60,6 +73,7 @@ export default class TimersDashboard extends Component
           <EditableTimerList 
             timers = {this.state.timers}
             onFormSubmit = {this.handleEditFormSubmit}
+            onDeleteClick = {this.handleDeleteClick}
           />
           <ToggleableTimerForm 
             onFormSubmit = {this.handleCreateFormSubmit} 
@@ -75,6 +89,10 @@ class EditableTimerList extends Component
   handleFormSubmit = (timer) => {
     this.props.onFormSubmit(timer);
   };
+
+  handleDeleteClick = (timerID) => {
+    this.props.onDeleteClick(timerID);
+  };
   
   render()
   {
@@ -87,6 +105,7 @@ class EditableTimerList extends Component
         elapsed = {timer.elapsed}
         runningSince = {timer.runningSince}
         onFormSubmit = {this.handleFormSubmit}
+        onDeleteClick = {this.handleDeleteClick}
       />
     ));
     
@@ -160,6 +179,10 @@ class EditableTimer extends Component
     this.setState({ editFormOpen: false });
   };
 
+  handleDeleteClick = (timerID) => {
+    this.props.onDeleteClick(timerID);
+  };
+
   render()
   {
     if (this.state.editFormOpen)
@@ -184,6 +207,7 @@ class EditableTimer extends Component
           elapsed = {this.props.elapsed}
           runningSince = {this.props.elapsed} 
           onEditClick = {this.handleEditClick}
+          onDeleteClick = {this.handleDeleteClick}
         />
       );
     }
@@ -257,6 +281,10 @@ class TimerForm extends Component
 
 class Timer extends Component
 {
+  handleDeleteClick = () => {
+    this.props.onDeleteClick(this.props.id);
+  };
+  
   render()
   {
     const elapsedString = Helpers.renderElapsedString(this.props.elapsed);
@@ -285,7 +313,10 @@ class Timer extends Component
             >
               <i className="edit icon" />
             </span>
-            <span className="right floated trash icon">
+            <span 
+              className="right floated trash icon"
+              onClick={this.handleDeleteClick}
+            >
               <i className="trash icon" />
             </span>
           </div>
